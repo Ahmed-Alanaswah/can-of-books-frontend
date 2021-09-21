@@ -5,7 +5,9 @@ class Authors extends Component {
 		return (
 			<div>
 				<h1>{this.props.author}</h1>
-				<h1>{this.props.Books.title}</h1>
+				<h1>{this.props.Books}</h1>
+
+				<h1>{this.props.authorId}</h1>
 				<button onClick={() => this.props.handledelete(this.props.authorId)}>
 					delete
 				</button>

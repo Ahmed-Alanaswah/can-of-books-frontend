@@ -25,7 +25,6 @@ class BestBooks extends React.Component {
 
 		return (
 			<>
-				<h2>My Essential Lifelong Learning &amp; Formation Shelf</h2>
 				{/* 
 				{this.state.books.length ? (
 					this.state.books.map((post) => {
