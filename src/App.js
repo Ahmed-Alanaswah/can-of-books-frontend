@@ -17,7 +17,7 @@ class App extends React.Component {
 			authorsList: [],
 			Books: {
 				title: "progreammer",
-				desciption: "lorem ipsum...............",
+				description: "lorem ipsum...............",
 				status: "available",
 			},
 			author: "",
@@ -37,10 +37,23 @@ class App extends React.Component {
 		this.setState({
 			author: e.target.value,
 		});
-
-		console.log(this.state.author);
+	};
+	handleTitle = (e) => {
+		this.setState({
+			title: e.target.value,
+		});
 	};
 
+	handleDescription = (e) => {
+		this.setState({
+			description: e.target.value,
+		});
+	};
+	handleStatus = (e) => {
+		this.setState({
+			status: e.target.value,
+		});
+	};
 	handleSubmit = (e) => {
 		e.preventDefault();
 		let config = {
@@ -49,7 +62,7 @@ class App extends React.Component {
 			url: "/create-book",
 			data: {
 				author: this.state.author,
-				Books: this.state.Books,
+				Bookd: { title: this.state.Books.title },
 			},
 		};
 
@@ -90,31 +103,43 @@ class App extends React.Component {
 	render() {
 		return (
 			<>
-				<Form onSubmit={this.handleSubmit}>
-					<Form.Group className="mb-3" controlId="formBasicEmail">
-						<Form.Control
-							type="text"
-							placeholder="Enter author name"
-							onChange={this.handleAuthorInput}
-						/>
-						<Form.Text className="text-muted">
-							We'll never share your email with anyone else.
-						</Form.Text>
-					</Form.Group>
-
-					<Form.Group className="mb-3" controlId="formBasicEmail">
-						<Form.Control type="text" placeholder="Enter email" />
-						<Form.Text className="text-muted">
-							We'll never share your email with anyone else.
-						</Form.Text>
-					</Form.Group>
-
-					<Button variant="primary" type="submit">
-						Craete author
-					</Button>
-				</Form>
 				<Router>
 					<Header user={this.state.user} onLogout={this.logoutHandler} />
+					<Form onSubmit={this.handleSubmit}>
+						<Form.Group className="mb-3" controlId="formBasicEmail">
+							<Form.Control
+								type="text"
+								placeholder="Enter author name"
+								onChange={this.handleAuthorInput}
+								name="author"
+								required
+							/>
+						</Form.Group>
+						<Form.Group className="mb-3" controlId="formBasicEmail">
+							<Form.Control
+								type="text"
+								placeholder="Enter title"
+								onChange={this.handleTitle}
+							/>
+						</Form.Group>
+						<Form.Group className="mb-3" controlId="formBasicEmail">
+							<Form.Control
+								type="text"
+								placeholder="Enter "
+								onChange={this.handleDescription}
+							/>
+						</Form.Group>
+						<Form.Group className="mb-3" controlId="formBasicEmail">
+							<Form.Control
+								type="text"
+								placeholder="Enter title"
+								onChange={this.handleTitle}
+							/>
+						</Form.Group>
+						<Button variant="primary" type="submit">
+							Craete author
+						</Button>
+					</Form>
 					<Switch>
 						<Route exact path="/">
 							{/* TODO: if the user is logged in, render the `BestBooks` component, if they are not, render the `Login` component */}
@@ -122,7 +147,7 @@ class App extends React.Component {
 								return (
 									<Authors
 										author={auth.author}
-										Books={auth.Books}
+										title={auth.Books}
 										authorId={auth._id}
 										handledelete={this.handledelete}
 									/>
