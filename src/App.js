@@ -15,12 +15,13 @@ class App extends React.Component {
 		this.state = {
 			user: null,
 			authorsList: [],
-			Books: {
-				title: "progreammer",
-				description: "lorem ipsum...............",
-				status: "available",
-			},
+
 			author: "",
+			title: "",
+			description: "",
+			email: "",
+			id: "",
+			showUpdate: false,
 		};
 	}
 
@@ -51,7 +52,7 @@ class App extends React.Component {
 	};
 	handleStatus = (e) => {
 		this.setState({
-			status: e.target.value,
+			email: e.target.value,
 		});
 	};
 	handleSubmit = (e) => {
@@ -62,7 +63,9 @@ class App extends React.Component {
 			url: "/create-book",
 			data: {
 				author: this.state.author,
-				Bookd: { title: this.state.Books.title },
+				title: this.state.title,
+				description: this.state.description,
+				email: this.state.email,
 			},
 		};
 
@@ -99,47 +102,120 @@ class App extends React.Component {
 			user: null,
 		});
 	};
+	handleUpdate = (author, description, title, email, id) => {
+		this.setState({
+			author: author,
+			title: title,
+			description: description,
+			email: email,
+			id: id,
+			showUpdate: true,
+		});
+	};
 
+	handleUpdateform = () => {
+		let config = {
+			method: "Put",
+			baseURL: "http://localhost:3000",
+			url: `/update-book/${this.state.id}`,
+			data: {
+				author: this.state.author,
+				title: this.state.title,
+				description: this.state.description,
+				email: this.state.email,
+			},
+		};
+		axios(config).then((res) => {
+			this.setState({
+				authorsList: res.data,
+			});
+		});
+	};
 	render() {
 		return (
 			<>
 				<Router>
 					<Header user={this.state.user} onLogout={this.logoutHandler} />
-					<Form onSubmit={this.handleSubmit}>
-						<Form.Group className="mb-3" controlId="formBasicEmail">
-							<Form.Control
-								type="text"
-								placeholder="Enter author name"
-								onChange={this.handleAuthorInput}
-								name="author"
-								required
-							/>
-						</Form.Group>
-						<Form.Group className="mb-3" controlId="formBasicEmail">
-							<Form.Control
-								type="text"
-								placeholder="Enter title"
-								onChange={this.handleTitle}
-							/>
-						</Form.Group>
-						<Form.Group className="mb-3" controlId="formBasicEmail">
-							<Form.Control
-								type="text"
-								placeholder="Enter "
-								onChange={this.handleDescription}
-							/>
-						</Form.Group>
-						<Form.Group className="mb-3" controlId="formBasicEmail">
-							<Form.Control
-								type="text"
-								placeholder="Enter title"
-								onChange={this.handleTitle}
-							/>
-						</Form.Group>
-						<Button variant="primary" type="submit">
-							Craete author
-						</Button>
-					</Form>
+					{!this.state.showUpdate ? (
+						<>
+							<Form onSubmit={this.handleSubmit}>
+								<Form.Group className="mb-3" controlId="formBasicEmail">
+									<Form.Control
+										type="text"
+										placeholder="Enter author name"
+										onChange={this.handleAuthorInput}
+										name="author"
+										required
+									/>
+								</Form.Group>
+								<Form.Group className="mb-3" controlId="formBasicEmail">
+									<Form.Control
+										type="text"
+										placeholder="Enter title"
+										onChange={this.handleTitle}
+									/>
+								</Form.Group>
+								<Form.Group className="mb-3" controlId="formBasicEmail">
+									<Form.Control
+										type="text"
+										placeholder="Enter description"
+										onChange={this.handleDescription}
+									/>
+								</Form.Group>
+								<Form.Group className="mb-3" controlId="formBasicEmail">
+									<Form.Control
+										type="text"
+										placeholder="Enter status"
+										onChange={this.handleStatus}
+									/>
+								</Form.Group>
+								<Button variant="primary" type="submit">
+									Craete author
+								</Button>
+							</Form>
+						</>
+					) : (
+						// update form
+						<Form onSubmit={this.handleUpdateform}>
+							<Form.Group className="mb-3" controlId="formBasicEmail">
+								<Form.Control
+									type="text"
+									placeholder="Enter author name"
+									onChange={this.handleAuthorInput}
+									name="author"
+									value={this.state.author}
+								/>
+							</Form.Group>
+							<Form.Group className="mb-3" controlId="formBasicEmail">
+								<Form.Control
+									type="text"
+									placeholder="Enter title"
+									onChange={this.handleTitle}
+									value={this.state.title}
+								/>
+							</Form.Group>
+							<Form.Group className="mb-3" controlId="formBasicEmail">
+								<Form.Control
+									type="text"
+									placeholder="Enter description"
+									onChange={this.handleDescription}
+									value={this.state.description}
+								/>
+							</Form.Group>
+							<Form.Group className="mb-3" controlId="formBasicEmail">
+								<Form.Control
+									type="text"
+									placeholder="Enter email"
+									onChange={this.handleStatus}
+									value={this.state.email}
+								/>
+							</Form.Group>
+							<Button variant="primary" type="submit">
+								update author
+							</Button>
+						</Form>
+					)}
+
 					<Switch>
 						<Route exact path="/">
 							{/* TODO: if the user is logged in, render the `BestBooks` component, if they are not, render the `Login` component */}
@@ -147,9 +223,12 @@ class App extends React.Component {
 								return (
 									<Authors
 										author={auth.author}
-										title={auth.Books}
+										title={auth.title}
+										description={auth.description}
+										email={auth.email}
 										authorId={auth._id}
 										handledelete={this.handledelete}
+										handleUpdate={this.handleUpdate}
 									/>
 								);
 							})}
