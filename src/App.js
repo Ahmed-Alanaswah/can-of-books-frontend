@@ -4,6 +4,9 @@ import Footer from "./Footer";
 import BestBooks from "./BestBooks";
 import axios from "axios";
 import Authors from "./Authors";
+import LogoutButton from "./LogoutButton";
+import LoginButton from "./LoginButton";
+import SpecialContent from "./SpecialContent";
 // import { Header } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Form, Button } from "react-bootstrap";
@@ -136,6 +139,10 @@ class App extends React.Component {
 			<>
 				<Router>
 					<Header user={this.state.user} onLogout={this.logoutHandler} />
+
+					<LoginButton />
+					<LogoutButton />
+					<SpecialContent />
 					{!this.state.showUpdate ? (
 						<>
 							<Form onSubmit={this.handleSubmit}>
